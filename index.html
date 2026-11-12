@@ -159,6 +159,9 @@ select,input{max-width:100%}
  #specSlider{width:100%!important}
  .nowrap-ell,#capTimeSig,#capSpecTop,#capOrderTop{white-space:normal!important}
 }
+.ver{display:inline-block;vertical-align:middle;font-size:11px;font-weight:650;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:999px;padding:1px 8px;margin-left:6px;letter-spacing:0}
+.brand small{font-weight:500}
+.foot{margin:18px 0 6px;text-align:center;font-size:12.5px;color:var(--muted)}
 /* utilidades */
 .right{margin-left:auto}
 .nowrap-ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -180,7 +183,7 @@ button{white-space:nowrap}
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
 <header class="appbar"><div class="in">
-  <h1 class="brand"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="28" height="24" rx="6"/><path d="M6 17h4l3-8 4 14 3-9 2 3h4"/></svg><span>Analizador de vibraciones<small>Ficheros .mat / .unv · order tracking · espectros · informe</small></span></h1>
+  <h1 class="brand"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="28" height="24" rx="6"/><path d="M6 17h4l3-8 4 14 3-9 2 3h4"/></svg><span>Analizador de vibraciones <span class="ver" title="Versión de la aplicación">v2.0</span><small>Ficheros .mat / .unv · order tracking · espectros · informe</small></span></h1>
   <div class="tabs" id="topTabs" aria-label="Secciones">
     <div class="tab on" data-top="prep">🛠️ Preparar archivo</div>
     <div class="tab" data-top="analysis">📈 Análisis</div>
@@ -424,6 +427,7 @@ button{white-space:nowrap}
 </div></div>
 </div>
 
+<footer class="foot">Analizador de vibraciones · versión 2.0 · 12-11-2026 · Todo se procesa en tu navegador; nada se envía ni se guarda en la nube.</footer>
 </main>
 <script>
 // ---------- MAT5 PARSER ----------
