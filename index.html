@@ -187,7 +187,7 @@ button{white-space:nowrap}
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
 <header class="appbar"><div class="in">
-  <h1 class="brand"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="28" height="24" rx="6"/><path d="M6 17h4l3-8 4 14 3-9 2 3h4"/></svg><span>Analizador de vibraciones <span class="ver" title="Versión de la aplicación">v2.1</span><small>Ficheros .mat / .unv · order tracking · espectros · informe</small></span></h1>
+  <h1 class="brand"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="28" height="24" rx="6"/><path d="M6 17h4l3-8 4 14 3-9 2 3h4"/></svg><span>Analizador de vibraciones <span class="ver" title="Versión de la aplicación">v2.2</span><small>Ficheros .mat / .unv · order tracking · espectros · informe</small></span></h1>
   <div class="tabs" id="topTabs" aria-label="Secciones">
     <div class="tab on" data-top="prep">🛠️ Preparar archivo</div>
     <div class="tab" data-top="analysis">📈 Análisis</div>
@@ -431,7 +431,7 @@ button{white-space:nowrap}
 </div></div>
 </div>
 
-<footer class="foot">Analizador de vibraciones · versión 2.1 · 15-11-2026 · Todo se procesa en tu navegador; nada se envía ni se guarda en la nube.</footer>
+<footer class="foot">Analizador de vibraciones · versión 2.2 · 19-11-2026 · Todo se procesa en tu navegador; nada se envía ni se guarda en la nube.<br><span id="offlineStatus" role="status"></span></footer>
 </main>
 <script>
 // ---------- MAT5 PARSER ----------
@@ -3871,10 +3871,29 @@ window.addEventListener('resize',render);
 })();
 </script>
 <script>
-/* Modo sin conexión: guarda la aplicación en el navegador (solo cuando se abre desde http/https, p. ej. GitHub Pages) */
-if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
-  window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
-}
+/* Modo sin conexión (solo cuando se abre desde http/https, p. ej. GitHub Pages).
+   OFFLINE_CACHE debe ser igual que CACHE en sw.js. */
+(function(){
+  var OFFLINE_CACHE='analizador-vibraciones-2.2', el=document.getElementById('offlineStatus');
+  function show(t,ok){ if(el){ el.textContent=t; el.style.color=ok?'var(--ok)':''; } }
+  if(!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)){ show('Modo sin conexión: se activa al abrir la app desde su dirección web o instalada.',false); return; }
+  function check(){
+    return caches.open(OFFLINE_CACHE).then(function(c){ return c.match('index.html'); }).then(function(h){ return !!h; }).catch(function(){ return false; });
+  }
+  window.addEventListener('load',function(){
+    show('Modo sin conexión: preparando…',false);
+    navigator.serviceWorker.register('sw.js').then(function(){ return navigator.serviceWorker.ready; }).then(function(reg){
+      var tries=0;
+      (function loop(){
+        check().then(function(ok){
+          if(ok){ show('Modo sin conexión: lista ✓ (puedes usarla sin internet)',true); return; }
+          if(tries++===0 && reg.active) reg.active.postMessage('recache');   /* recompone la copia si otra app del mismo sitio la borró */
+          if(tries<8) setTimeout(loop,1500); else show('Modo sin conexión: no se pudo preparar. Abre la app una vez con internet y recarga.',false);
+        });
+      })();
+    }).catch(function(){ show('Modo sin conexión: no disponible en este navegador.',false); });
+  });
+})();
 </script>
 </body>
 </html>
